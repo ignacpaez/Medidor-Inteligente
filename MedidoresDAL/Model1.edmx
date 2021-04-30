@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MedidoresDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Rut" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="CodigoRegion" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CodigoCliente" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="IdMedidor" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Medicion">
+          <Key>
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="ValorConsumo" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+          <Property Name="IdMedidor" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Medidor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="CodigoRegion" />
+          </Key>
+          <Property Name="CodigoRegion" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodigoTarifa" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TarifaElectrica">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Factor" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Trabajador">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Rut" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="30" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Clave" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_Direccion_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="CodigoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Direccion_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Direccion_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="CodigoRegion" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="CodigoRegion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Medicion_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Medicion" Type="Self.Medicion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medicion">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Region_Tarifa">
+          <End Role="TarifaElectrica" Type="Self.TarifaElectrica" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Region" Type="Self.Region" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TarifaElectrica">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Region">
+              <PropertyRef Name="CodigoTarifa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MedidoresDBModelStoreContainer">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Direccion" EntityType="Self.Direccion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medicion" EntityType="Self.Medicion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medidor" EntityType="Self.Medidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TarifaElectrica" EntityType="Self.TarifaElectrica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trabajador" EntityType="Self.Trabajador" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_Direccion_Cliente" Association="Self.fk_Direccion_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Direccion_Medidor" Association="Self.fk_Direccion_Medidor">
+            <End Role="Medidor" EntitySet="Medidor" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Direccion_Region" Association="Self.fk_Direccion_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Medicion_Medidor" Association="Self.fk_Medicion_Medidor">
+            <End Role="Medidor" EntitySet="Medidor" />
+            <End Role="Medicion" EntitySet="Medicion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Region_Tarifa" Association="Self.fk_Region_Tarifa">
+            <End Role="TarifaElectrica" EntitySet="TarifaElectrica" />
+            <End Role="Region" EntitySet="Region" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MedidoresDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rut" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Direccion" Relationship="Self.fk_Direccion_Cliente" FromRole="Cliente" ToRole="Direccion" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="CodigoRegion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CodigoCliente" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdMedidor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.fk_Direccion_Cliente" FromRole="Direccion" ToRole="Cliente" />
+          <NavigationProperty Name="Medidor" Relationship="Self.fk_Direccion_Medidor" FromRole="Direccion" ToRole="Medidor" />
+          <NavigationProperty Name="Region" Relationship="Self.fk_Direccion_Region" FromRole="Direccion" ToRole="Region" />
+        </EntityType>
+        <EntityType Name="Medicion">
+          <Key>
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValorConsumo" Type="Decimal" Precision="4" Scale="2" Nullable="false" />
+          <Property Name="IdMedidor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Medidor" Relationship="Self.fk_Medicion_Medidor" FromRole="Medicion" ToRole="Medidor" />
+        </EntityType>
+        <EntityType Name="Medidor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Direccion" Relationship="Self.fk_Direccion_Medidor" FromRole="Medidor" ToRole="Direccion" />
+          <NavigationProperty Name="Medicion" Relationship="Self.fk_Medicion_Medidor" FromRole="Medidor" ToRole="Medicion" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="CodigoRegion" />
+          </Key>
+          <Property Name="CodigoRegion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CodigoTarifa" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Direccion" Relationship="Self.fk_Direccion_Region" FromRole="Region" ToRole="Direccion" />
+          <NavigationProperty Name="TarifaElectrica" Relationship="Self.fk_Region_Tarifa" FromRole="Region" ToRole="TarifaElectrica" />
+        </EntityType>
+        <EntityType Name="TarifaElectrica">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Factor" Type="Decimal" Precision="4" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Region" Relationship="Self.fk_Region_Tarifa" FromRole="TarifaElectrica" ToRole="Region" />
+        </EntityType>
+        <EntityType Name="Trabajador">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rut" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Clave" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_Direccion_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="CodigoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Direccion_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Direccion_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="CodigoRegion" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="CodigoRegion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Medicion_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Medicion" Type="Self.Medicion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Medicion">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Region_Tarifa">
+          <End Role="TarifaElectrica" Type="Self.TarifaElectrica" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Region" Type="Self.Region" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TarifaElectrica">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Region">
+              <PropertyRef Name="CodigoTarifa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MedidoresDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Direccion" EntityType="Self.Direccion" />
+          <EntitySet Name="Medicion" EntityType="Self.Medicion" />
+          <EntitySet Name="Medidor" EntityType="Self.Medidor" />
+          <EntitySet Name="Region" EntityType="Self.Region" />
+          <EntitySet Name="TarifaElectrica" EntityType="Self.TarifaElectrica" />
+          <EntitySet Name="Trabajador" EntityType="Self.Trabajador" />
+          <AssociationSet Name="fk_Direccion_Cliente" Association="Self.fk_Direccion_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Direccion_Medidor" Association="Self.fk_Direccion_Medidor">
+            <End Role="Medidor" EntitySet="Medidor" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Direccion_Region" Association="Self.fk_Direccion_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Medicion_Medidor" Association="Self.fk_Medicion_Medidor">
+            <End Role="Medidor" EntitySet="Medidor" />
+            <End Role="Medicion" EntitySet="Medicion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Region_Tarifa" Association="Self.fk_Region_Tarifa">
+            <End Role="TarifaElectrica" EntitySet="TarifaElectrica" />
+            <End Role="Region" EntitySet="Region" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MedidoresDBModelStoreContainer" CdmEntityContainer="MedidoresDBEntities">
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Rut" ColumnName="Rut" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Direccion">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Direccion">
+              <MappingFragment StoreEntitySet="Direccion">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="CodigoRegion" ColumnName="CodigoRegion" />
+                <ScalarProperty Name="CodigoCliente" ColumnName="CodigoCliente" />
+                <ScalarProperty Name="IdMedidor" ColumnName="IdMedidor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicion">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Medicion">
+              <MappingFragment StoreEntitySet="Medicion">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="ValorConsumo" ColumnName="ValorConsumo" />
+                <ScalarProperty Name="IdMedidor" ColumnName="IdMedidor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medidor">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Medidor">
+              <MappingFragment StoreEntitySet="Medidor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Region">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="CodigoRegion" ColumnName="CodigoRegion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="CodigoTarifa" ColumnName="CodigoTarifa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TarifaElectrica">
+            <EntityTypeMapping TypeName="MedidoresDBModel.TarifaElectrica">
+              <MappingFragment StoreEntitySet="TarifaElectrica">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Factor" ColumnName="Factor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trabajador">
+            <EntityTypeMapping TypeName="MedidoresDBModel.Trabajador">
+              <MappingFragment StoreEntitySet="Trabajador">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Rut" ColumnName="Rut" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Clave" ColumnName="Clave" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7c90a34396fa4a3898c6975f9e0bee04" Name="Diagram1">
+        <EntityTypeShape EntityType="MedidoresDBModel.Cliente" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.Direccion" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.Medicion" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.Medidor" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.Region" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.TarifaElectrica" Width="1.5" PointX="1.5" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedidoresDBModel.Trabajador" Width="1.5" PointX="5.75" PointY="2.375" IsExpanded="true" />
+        <AssociationConnector Association="MedidoresDBModel.fk_Direccion_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="MedidoresDBModel.fk_Direccion_Medidor" ManuallyRouted="false" />
+        <AssociationConnector Association="MedidoresDBModel.fk_Direccion_Region" ManuallyRouted="false" />
+        <AssociationConnector Association="MedidoresDBModel.fk_Medicion_Medidor" ManuallyRouted="false" />
+        <AssociationConnector Association="MedidoresDBModel.fk_Region_Tarifa" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
